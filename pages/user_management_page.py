@@ -47,6 +47,39 @@ class UserManagementPage:
         self.page.wait_for_timeout(1500)
         self.page.locator(f'xpath={search_button_xpath}').click()
         self.page.wait_for_timeout(3000)
+        
+    def edit_user(self, username, new_role=None, new_status=None, new_employee_name=None, new_password=None):
+        
+        self.search_user(username) 
+
+        self.page.wait_for_selector(f"//div[text()='{username}']", timeout=5000)
+
+        edit_icon_xpath = f"//div[text()='{username}']/ancestor::div[@role='row']//button/i[@class='oxd-icon bi-pencil-fill']"
+        
+        self.page.locator(f'xpath={edit_icon_xpath}').click()
+        
+        self.page.wait_for_selector("h6:has-text('Edit User')", timeout=5000)
+
+        if new_role:
+            self.page.locator("(//div[contains(@class,'oxd-select-text-input')])[1]").click()
+            self.page.locator(f"div[role='option']:has-text('{new_role}')").click()
+
+        if new_employee_name:
+            self.employee_name_input.fill(new_employee_name[:1])
+            self.page.wait_for_selector("div.oxd-autocomplete-option", timeout=5000)
+            self.page.locator(f"div.oxd-autocomplete-option span:has-text('{new_employee_name}')").first.click()
+
+        if new_status:
+            self.page.locator("(//div[contains(@class,'oxd-select-text-input')])[2]").click()
+            self.page.locator(f"div[role='option']:has-text('{new_status}')").click()
+
+        if new_password:
+            self.page.locator("label:has-text('Change Password ?')").click()
+            self.password_input.fill(new_password)
+            self.confirm_password_input.fill(new_password)
+
+        self.save_button.click()
+        self.page.wait_for_selector("div.oxd-toast.oxd-toast--success", timeout=10000)
 
     def save_user(self):
         self.save_button.click()
