@@ -80,6 +80,25 @@ class UserManagementPage:
 
         self.save_button.click()
         self.page.wait_for_selector("div.oxd-toast.oxd-toast--success", timeout=10000)
+    def delete_user(self, username):
+            # 1. Search for the user to make the row visible
+            self.search_user(username) 
+            
+            # Wait for the user's row to appear
+            self.page.wait_for_selector(f"//div[text()='{username}']", timeout=5000)
+
+            # 2. Click the individual Delete (trash) icon in the user's row
+            # Locator targets the trash icon within the row containing the username
+            delete_icon_xpath = f"//div[text()='{username}']/ancestor::div[@role='row']//button/i[@class='oxd-icon bi-trash']"
+            self.page.locator(f'xpath={delete_icon_xpath}').click()
+            
+            # 3. Confirm the deletion in the modal dialog ("Are You Sure?")
+            # Wait for the modal button to appear
+            self.page.wait_for_selector("button:has-text('Yes, Delete')", timeout=5000)
+            self.page.locator("button:has-text('Yes, Delete')").click()
+            
+            # Wait for the success toast message
+            self.page.wait_for_selector("div.oxd-toast.oxd-toast--success", timeout=10000)
 
     def save_user(self):
         self.save_button.click()
