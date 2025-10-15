@@ -4,12 +4,10 @@ class UserManagementPage:
     def __init__(self, page: Page):
         self.page = page
 
-        # Admin panel elements
         self.username_box = page.locator("div.oxd-input-group input[name='username']")
         self.search_button = page.locator("button:has-text('Search')")
         self.add_button = page.locator("button:has-text('Add')")
 
-        # Add User form elements
         self.user_role_dropdown = page.locator("(//div[contains(@class,'oxd-select-text-input')])[1]")
         self.employee_name_input = page.locator("input[placeholder='Type for hints...']")
         self.status_dropdown = page.locator("(//div[contains(@class,'oxd-select-text-input')])[2]")
@@ -41,7 +39,6 @@ class UserManagementPage:
         self.page.wait_for_timeout(2000)
 
     def search_user(self, username):
-        # Using exact XPaths from your inspection
         username_input_xpath = '//*[@id="app"]/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[1]/div/div[1]/div/div[2]/input'
         search_button_xpath = '/html/body/div/div[1]/div[2]/div[2]/div/div[1]/div[2]/form/div[2]/button[2]'
 
